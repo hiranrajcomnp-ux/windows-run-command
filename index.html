@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A practical quick reference guide to Windows Run commands and their uses.">
+  <title>Windows Run Commands — Quick Guide</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b1020;
+      --panel: #121a2d;
+      --panel-2: #18233a;
+      --text: #eaf0ff;
+      --muted: #a8b4ce;
+      --accent: #62e6c5;
+      --accent-2: #8ba7ff;
+      --border: rgba(184, 201, 239, .16);
+      --shadow: 0 18px 45px rgba(0, 0, 0, .25);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: radial-gradient(ellipse at top, #172447 0, var(--bg) 52%);
+      color: var(--text);
+      font: 16px/1.6 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    a { color: var(--accent); }
+    .container { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+    header { padding: 64px 0 36px; text-align: center; }
+    .eyebrow {
+      display: inline-block; padding: 6px 12px; border: 1px solid var(--border);
+      border-radius: 999px; color: var(--accent); font-size: .82rem; letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 18px 0 12px; font-size: clamp(2rem, 5vw, 3.6rem); line-height: 1.1; }
+    header p { max-width: 680px; margin: 0 auto; color: var(--muted); }
+    .tip {
+      margin: 24px auto 0; max-width: 720px; padding: 14px 18px; border-radius: 14px;
+      background: rgba(98, 230, 197, .08); border: 1px solid rgba(98, 230, 197, .25);
+    }
+    .toolbar {
+      position: sticky; top: 0; z-index: 5; padding: 14px 0;
+      background: rgba(11, 16, 32, .9); backdrop-filter: blur(14px);
+      border-block: 1px solid var(--border);
+    }
+    .tools { display: flex; gap: 10px; flex-wrap: wrap; }
+    input[type="search"] {
+      flex: 1 1 260px; min-width: 0; padding: 12px 14px; border-radius: 10px;
+      border: 1px solid var(--border); background: var(--panel); color: var(--text);
+      font: inherit; outline: none;
+    }
+    input[type="search"]:focus { border-color: var(--accent); }
+    button {
+      padding: 11px 15px; border: 1px solid var(--border); border-radius: 10px;
+      background: var(--panel-2); color: var(--text); font: inherit; cursor: pointer;
+    }
+    button:hover { border-color: var(--accent); }
+    .count { color: var(--muted); align-self: center; font-size: .9rem; }
+    main { padding: 30px 0 60px; }
+    .section-heading { display: flex; gap: 16px; align-items: end; justify-content: space-between; margin: 0 0 18px; }
+    h2 { margin: 0; font-size: 1.5rem; }
+    .section-heading p { margin: 4px 0 0; color: var(--muted); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); gap: 14px; }
+    .command-card {
+      min-width: 0; padding: 18px; border: 1px solid var(--border); border-radius: 16px;
+      background: linear-gradient(145deg, rgba(24, 35, 58, .96), rgba(18, 26, 45, .96));
+      box-shadow: var(--shadow); transition: transform .18s ease, border-color .18s ease;
+    }
+    .command-card:hover { transform: translateY(-3px); border-color: rgba(98, 230, 197, .5); }
+    .card-top { display: flex; gap: 12px; align-items: center; justify-content: space-between; }
+    .number { color: var(--muted); font-size: .8rem; }
+    code {
+      font: 600 .95rem/1.5 ui-monospace, SFMono-Regular, Consolas, monospace;
+      color: var(--accent); overflow-wrap: anywhere;
+    }
+    .command-card p { margin: 12px 0 16px; color: #d4def2; }
+    .card-actions { display: flex; gap: 8px; align-items: center; }
+    .copy { padding: 7px 10px; font-size: .85rem; }
+    .tag { margin-left: auto; color: var(--muted); font-size: .75rem; }
+    .notes {
+      margin-top: 32px; padding: 22px; border-radius: 16px; border: 1px solid var(--border);
+      background: var(--panel);
+    }
+    .notes h2 { margin-bottom: 10px; }
+    .notes ul { margin-bottom: 0; padding-left: 22px; color: #d4def2; }
+    .full-reference {
+      margin-top: 32px; padding: 22px; border-radius: 16px; border: 1px solid var(--border);
+      background: rgba(18, 26, 45, 0.8);
+    }
+    .full-reference h2 { margin-bottom: 16px; }
+    .full-reference-list {
+      list-style: none; padding: 0; margin: 0; display: grid; gap: 10px;
+    }
+    .full-reference-list li {
+      padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.02);
+      color: #dfeafc;
+    }
+    .full-reference-list strong {
+      color: var(--accent); font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    }
+    .full-reference-list em { color: var(--muted); font-style: normal; }
+    footer { padding: 26px 0 40px; color: var(--muted); text-align: center; border-top: 1px solid var(--border); }
+    .empty { grid-column: 1 / -1; padding: 30px; text-align: center; color: var(--muted); border: 1px dashed var(--border); border-radius: 14px; }
+    @media (max-width: 600px) {
+      header { padding-top: 42px; }
+      .section-heading { display: block; }
+      .command-card { padding: 15px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="container">
+    <span class="eyebrow">Windows Tips • Quick Reference</span>
+    <h1>Windows Run Commands</h1>
+    <p>A searchable guide to useful Windows Run commands for troubleshooting, system settings, administration, and everyday tasks.</p>
+    <div class="tip"><strong>How to use:</strong> Press <kbd>Win</kbd> + <kbd>R</kbd>, type a command, then press <kbd>Enter</kbd>.</div>
+  </header>
+
+  <div class="toolbar">
+    <div class="container tools">
+      <input id="search" type="search" placeholder="Search commands or uses… (e.g. network, sound, cmd)" aria-label="Search Windows Run commands">
+      <button id="clear" type="button">Clear search</button>
+      <span class="count" id="count" aria-live="polite"></span>
+    </div>
+  </div>
+
+  <main class="container">
+    <div class="section-heading">
+      <div>
+        <h2>Command Library</h2>
+        <p>Search, browse, or copy a command with one click.</p>
+      </div>
+    </div>
+    <section id="commandGrid" class="grid" aria-label="Windows Run command list"></section>
+
+    <section class="full-reference" aria-labelledby="full-reference-title">
+      <h2 id="full-reference-title">Full command list with explanations</h2>
+      <ul id="fullReferenceList" class="full-reference-list"></ul>
+    </section>
+
+    <section class="notes">
+      <h2>Safety & compatibility notes</h2>
+      <ul>
+        <li>Some tools require administrator privileges.</li>
+        <li><code>secpol.msc</code> and <code>lusrmgr.msc</code> are unavailable by default on many Windows Home editions.</li>
+        <li>Commands and features may vary across Windows 10, Windows 11, and older versions.</li>
+        <li>Use Driver Verifier (<code>verifier</code>) only when troubleshooting driver issues; incorrect settings can cause startup problems.</li>
+        <li>Do not delete files from system folders unless you understand what they are used for.</li>
+        <li>Some commands open a tool only if the related app or feature is installed.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">Windows Run Commands — Quick Guide · Made for learning and troubleshooting</div>
+  </footer>
+
+  <script>
+    const commands = [
+      ["%temp%", "Opens the temporary files folder for the current user.", "Files"],
+      ["temp", "Opens the Windows temporary files folder, if available.", "Files"],
+      ["prefetch", "Opens the Prefetch folder, which stores application startup data.", "Files"],
+      ["sysdm.cpl", "Opens System Properties for computer name, performance, and advanced settings.", "System"],
+      ["msconfig", "Opens System Configuration for startup and boot troubleshooting.", "System"],
+      ["secpol.msc", "Opens Local Security Policy; unavailable on many Home editions.", "Security"],
+      ["psr", "Opens Problem Steps Recorder on supported Windows versions; deprecated in newer releases.", "System"],
+      ["shell:My Videos", "Opens the user's Videos folder on supported systems.", "Folders"],
+      ["shell:My Music", "Opens the user's Music folder.", "Folders"],
+      ["shell:My Audios", "Not a standard Windows shell command; use shell:My Music instead.", "Folders"],
+      ["shell:My Pictures", "Opens the user's Pictures folder.", "Folders"],
+      ["mrt", "Opens the Microsoft Windows Malicious Software Removal Tool.", "Security"],
+      ["lusrmgr.msc", "Manages local users and groups; unavailable in Windows Home editions.", "Administration"],
+      ["netplwiz", "Opens advanced user account settings.", "Accounts"],
+      ["..", "Opens the parent folder in supported Run/File Explorer contexts.", "Folders"],
+      [".", "Opens the current user's profile folder in supported Windows contexts.", "Folders"],
+      ["mmsys.cpl", "Opens Sound settings for playback and recording devices.", "Audio"],
+      ["fsmgmt.msc", "Opens Shared Folders management.", "Administration"],
+      ["mstsc", "Opens Remote Desktop Connection.", "Network"],
+      ["mdsched", "Opens Windows Memory Diagnostic to check RAM for errors.", "System"],
+      ["mmsys.cpl", "Opens Sound settings; this command is listed twice in the original guide.", "Audio"],
+      ["intl.cpl", "Opens regional and language-related settings.", "Settings"],
+      ["sdclt", "Opens Backup and Restore tools on Windows versions that support it.", "Backup"],
+      ["comexp.msc", "Opens Component Services for COM+ and related administration.", "Administration"],
+      ["magnify", "Opens the Magnifier accessibility tool.", "Accessibility"],
+      ["osk", "Opens the On-Screen Keyboard.", "Accessibility"],
+      ["%appdata%", "Opens the current user's roaming application data folder.", "Folders"],
+      ["%programdata%", "Opens the shared application data folder.", "Folders"],
+      ["shell:Administrative Tools", "Opens Windows administrative tools, where supported.", "Administration"],
+      ["shell:Fonts", "Opens the installed fonts folder.", "Folders"],
+      ["shell:NetworkPlacesFolder", "Opens the Network locations view in File Explorer.", "Network"],
+      ["shell:Administrative Tools", "Opens administrative tools; duplicate of an earlier entry.", "Administration"],
+      ["verifier", "Opens Driver Verifier to troubleshoot problematic drivers. Use carefully.", "System"],
+      ["certmgr.msc", "Manages certificates for the current user.", "Security"],
+      ["certlm.msc", "Manages certificates for the local computer; availability can vary.", "Security"],
+      ["msedge", "Opens Microsoft Edge if installed.", "Apps"],
+      ["winword", "Opens Microsoft Word if installed.", "Apps"],
+      ["notepad", "Opens Notepad.", "Apps"],
+      ["powerpnt", "Opens Microsoft PowerPoint if installed.", "Apps"],
+      ["mspaint", "Opens Microsoft Paint.", "Apps"],
+      ["mblctr", "Opens Windows Mobility Center on supported devices.", "System"],
+      ["recoverydrive", "Opens the Recovery Drive creation tool.", "Recovery"],
+      ["perfmon /report", "Generates a System Diagnostics report about performance and system health.", "Diagnostics"],
+      ["colorcpl.exe", "Opens Color Management settings.", "Settings"],
+      ["joy.cpl", "Opens game controller and joystick settings.", "Devices"],
+      ["odbcad32.exe", "Opens the ODBC Data Source Administrator for database connections.", "Administration"],
+      ["wmimgmt.msc", "Opens Windows Management Instrumentation (WMI) management.", "Administration"],
+      ["iscsicpl.exe", "Opens iSCSI Initiator settings for network storage connections.", "Network"],
+      ["cmd", "Opens Command Prompt.", "Tools"],
+      ["explorer", "Opens File Explorer.", "Files"],
+      ["powershell", "Opens Windows PowerShell.", "Tools"],
+      ["calc", "Opens Calculator.", "Apps"],
+      ["snippingtool", "Opens the Snipping Tool for screenshots.", "Tools"],
+      ["charmap", "Opens Character Map to find and copy special characters.", "Tools"],
+      ["comexp.msc", "Opens Component Services; duplicate of an earlier entry.", "Administration"],
+      ["msinfo32", "Displays detailed system information about hardware and software.", "Diagnostics"],
+      ["appwiz.cpl", "Opens Programs and Features to uninstall or change desktop applications.", "Apps"],
+      ["fonts", "Opens the Windows Fonts folder.", "Folders"],
+      ["wf.msc", "Opens Windows Defender Firewall with Advanced Security.", "Security"],
+      ["wscui.cpl", "Opens the Security and Maintenance interface on supported Windows versions.", "Security"],
+      ["ncpa.cpl", "Opens Network Connections to manage network adapters.", "Network"],
+      ["main.cpl", "Opens Mouse Properties.", "Devices"],
+      ["devmgmt.msc", "Opens Device Manager to view and manage hardware drivers.", "Devices"],
+      ["useraccountcontrolsettings", "Opens User Account Control settings for notification levels.", "Security"],
+      ["http:", "Incomplete by itself; use a full URL such as https://www.example.com in Run.", "Network"]
+    ];
+
+    const grid = document.getElementById("commandGrid");
+    const fullReferenceList = document.getElementById("fullReferenceList");
+    const search = document.getElementById("search");
+    const count = document.getElementById("count");
+
+    function renderFullReference(list) {
+      fullReferenceList.replaceChildren();
+      list.forEach(([command, description, category]) => {
+        const item = document.createElement("li");
+        item.innerHTML = `<strong>${command}</strong> — ${description} <em>(${category})</em>`;
+        fullReferenceList.appendChild(item);
+      });
+    }
+
+    function render(list) {
+      grid.replaceChildren();
+      count.textContent = `${list.length} of ${commands.length} commands`;
+      if (!list.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = "No matching commands. Try another search.";
+        grid.appendChild(empty);
+        return;
+      }
+      list.forEach(([command, description, category], index) => {
+        const card = document.createElement("article");
+        card.className = "command-card";
+        const top = document.createElement("div");
+        top.className = "card-top";
+        const number = document.createElement("span");
+        number.className = "number";
+        number.textContent = `COMMAND ${commands.indexOf(list[index]) + 1}`;
+        const code = document.createElement("code");
+        code.textContent = command;
+        top.append(number, code);
+
+        const p = document.createElement("p");
+        p.textContent = description;
+        const actions = document.createElement("div");
+        actions.className = "card-actions";
+        const copy = document.createElement("button");
+        copy.type = "button";
+        copy.className = "copy";
+        copy.textContent = "Copy command";
+        copy.addEventListener("click", async () => {
+          try {
+            await navigator.clipboard.writeText(command);
+            copy.textContent = "Copied!";
+            setTimeout(() => copy.textContent = "Copy command", 1400);
+          } catch {
+            copy.textContent = "Select command above";
+          }
+        });
+        const tag = document.createElement("span");
+        tag.className = "tag";
+        tag.textContent = category;
+        actions.append(copy, tag);
+        card.append(top, p, actions);
+        grid.appendChild(card);
+      });
+      renderFullReference(list);
+    }
+
+    function filterCommands() {
+      const term = search.value.trim().toLowerCase();
+      render(commands.filter(([command, description, category]) =>
+        `${command} ${description} ${category}`.toLowerCase().includes(term)
+      ));
+    }
+
+    search.addEventListener("input", filterCommands);
+    document.getElementById("clear").addEventListener("click", () => {
+      search.value = "";
+      filterCommands();
+      search.focus();
+    });
+    render(commands);
+  </script>
+</body>
+</html>
